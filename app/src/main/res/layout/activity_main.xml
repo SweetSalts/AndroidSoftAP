@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="25dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="bottom"
+        android:text="TV 热点"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="false"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <!--左侧菜单栏列表-->
+        <LinearLayout
+            android:id="@+id/menuList"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <Button
+                android:id="@+id/menuBtn_switch"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lb_action_2_lines_height"
+                android:background="?android:selectableItemBackground"
+                android:text="开关" />
+
+            <Button
+                android:id="@+id/menuBtn_IP"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lb_action_2_lines_height"
+                android:background="?android:selectableItemBackground"
+                android:text="IP管理" />
+
+            <Button
+                android:id="@+id/menuBtn_speed"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lb_action_2_lines_height"
+                android:background="?android:selectableItemBackground"
+                android:text="限速管理" />
+
+            <Button
+                android:id="@+id/menuBtn_device"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lb_action_2_lines_height"
+                android:background="?android:selectableItemBackground"
+                android:text="设备管理" />
+
+        </LinearLayout>
+
+
+        <FrameLayout
+            android:id="@+id/right_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="3"
+            android:paddingTop="0dp"></FrameLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

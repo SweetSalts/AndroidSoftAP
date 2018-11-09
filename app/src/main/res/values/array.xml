@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="encryptiontypeArr">
+        <item>无</item>
+        <item>WEP加密</item>
+        <item>WPA/WPA2加密</item>
+    </string-array>
+    
+    <string-array name="ip_time">
+        <item>永不</item>
+        <item>10min</item>
+        <item>30min</item>
+        <item>1h</item>
+        <item>10h</item>
+    </string-array>
+</resources>
