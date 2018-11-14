@@ -20,6 +20,8 @@ import com.tcl.a1.androidsoftap.fragment.IPFragment;
 import com.tcl.a1.androidsoftap.fragment.SpeedFragment;
 import com.tcl.a1.androidsoftap.fragment.SwitchFragment;
 
+import java.lang.reflect.Method;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 菜单按钮并绑定监听
         initButton();
         mWifiManager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
         myWifi = new WifiConnect(mWifiManager);
         replaceFragment(new SwitchFragment());
     }
@@ -87,10 +90,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (mWifiManager.isWifiEnabled()) {
                         mWifiManager.setWifiEnabled(false);
                     }
-                    myWifi.stratWifiAp("a1TestAP", "12345678", "WPA_PSK");
-                    btnSwitch.setText("a1TestAP");
-                    apManage.setVisibility(View.VISIBLE);
-                    Toast.makeText(this, "开启热点成功", Toast.LENGTH_SHORT).show();
+                    Method method = null;
+                    try {
+                        method = mWifiManager.getClass().getMethod("getWifiApConfiguration");
+                        WifiConfiguration apConfig = (WifiConfiguration) method.invoke(mWifiManager);
+                        //apConfig.
+                        //Log.d(TAG, "onClick: "+apConfig.preSharedKey);
+//                        if(apConfig.preSharedKey.equals("")){
+//                            myWifi.stratWifiAp(apConfig.SSID, apConfig.preSharedKey, "NONE");
+//
+//                        }
+//                        else{
+                            myWifi.stratWifiAp(apConfig.SSID, "123456789", "WPA_PSK");
+//                        }
+
+                        btnSwitch.setText(apConfig.SSID);
+                        apManage.setVisibility(View.VISIBLE);
+                        Toast.makeText(this, "开启热点成功", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
                     // TODO：关闭状态下
                     myWifi.closeWifiAp();

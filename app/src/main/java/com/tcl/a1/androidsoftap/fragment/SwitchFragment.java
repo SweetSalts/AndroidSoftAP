@@ -25,6 +25,8 @@ import android.widget.Toast;
 import com.tcl.a1.androidsoftap.R;
 import com.tcl.a1.androidsoftap.WifiConnect;
 
+import java.lang.reflect.Method;
+
 
 public class SwitchFragment extends Fragment {
     private static final String TAG = "ysw";
@@ -65,6 +67,14 @@ public class SwitchFragment extends Fragment {
         adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_expandable_list_item_1, encryptionTypeList);
         encryptionType.setAdapter(adapter);
+        try {
+            Method method = mWifiManager.getClass().getMethod("getWifiApConfiguration");
+            WifiConfiguration apConfig = (WifiConfiguration) method.invoke(mWifiManager);
+            apName=apConfig.SSID;
+            apPassword= apConfig.preSharedKey;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ssid_text.setText(apName);
         password_text.setText(apPassword);
         return view;
