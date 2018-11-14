@@ -1,5 +1,8 @@
 package com.tcl.a1.androidsoftap;
 
+import android.content.Context;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.tcl.a1.androidsoftap.fragment.DeviceFragment;
@@ -23,6 +28,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button menuBtn_IP;
     private Button menuBtn_speed;
     private Button menuBtn_device;
+    private Switch btnSwitch;
+    private LinearLayout apManage;
+
+    private WifiConnect myWifi;
+    private WifiManager mWifiManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         // 菜单按钮并绑定监听
         initButton();
+        mWifiManager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        myWifi = new WifiConnect(mWifiManager);
         replaceFragment(new SwitchFragment());
     }
 
@@ -44,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuBtn_speed.setOnClickListener(this);
         menuBtn_device = findViewById(R.id.menuBtn_device);
         menuBtn_device.setOnClickListener(this);
+        btnSwitch = findViewById(R.id.btnSwitch_swiFra);
+        btnSwitch.setOnClickListener(this);
+        apManage = findViewById(R.id.ap_manage);
     }
 
     @Override
@@ -66,8 +81,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i(TAG, "onClick: menuBtn_device");
                 replaceFragment(new DeviceFragment());
                 break;
+            case R.id.btnSwitch_swiFra:
+                if (btnSwitch.isChecked()) {
+                    // TODO: 打开状态下
+                    if (mWifiManager.isWifiEnabled()) {
+                        mWifiManager.setWifiEnabled(false);
+                    }
+                    myWifi.stratWifiAp("a1TestAP", "12345678", "WPA_PSK");
+                    btnSwitch.setText("a1TestAP");
+                    apManage.setVisibility(View.VISIBLE);
+                    Toast.makeText(this, "开启热点成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    // TODO：关闭状态下
+                    myWifi.closeWifiAp();
+                    btnSwitch.setText("打开/关闭热点");
+                    apManage.setVisibility(View.GONE);
+                }
+                break;
             default:
-                Toast.makeText(MainActivity.this,"123",Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this,"点错了",Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -81,28 +113,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
-
-/*
-    // 连续两次点击返回键退出程序
-    private long mExitTime;
-    //对返回键进行监听
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            exit();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-    public void exit() {
-        if ((System.currentTimeMillis() - mExitTime) > 2000) {
-            Toast.makeText(MainActivity.this, "再按一次退出每日新闻", Toast.LENGTH_SHORT).show();
-            mExitTime = System.currentTimeMillis();
-        } else {
-            finish();
-            System.exit(0);
-        }
-    }*/
 
 }
