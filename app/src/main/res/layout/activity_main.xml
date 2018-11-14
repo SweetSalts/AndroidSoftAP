@@ -19,63 +19,85 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusableInTouchMode="false"
-        android:orientation="horizontal"
-        android:padding="15dp">
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <!--左侧菜单栏列表-->
+        <Switch
+            android:id="@+id/btnSwitch_swiFra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:paddingLeft="90dp"
+            android:text="打开/关闭热点"
+            android:textAlignment="textStart" />
+
         <LinearLayout
-            android:id="@+id/menuList"
-            android:layout_width="0dp"
+            android:id="@+id/ap_manage"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:focusableInTouchMode="false"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:visibility="gone">
 
-            <Button
-                android:id="@+id/menuBtn_switch"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lb_action_2_lines_height"
-                android:background="?android:selectableItemBackground"
-                android:text="开关" />
+            <!--左侧菜单栏列表-->
+            <LinearLayout
+                android:id="@+id/menuList"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-100dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp">
 
-            <Button
-                android:id="@+id/menuBtn_IP"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lb_action_2_lines_height"
-                android:background="?android:selectableItemBackground"
-                android:text="IP管理" />
+                <Button
+                    android:id="@+id/menuBtn_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="?android:selectableItemBackground"
+                    android:text="配置热点" />
 
-            <Button
-                android:id="@+id/menuBtn_speed"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lb_action_2_lines_height"
-                android:background="?android:selectableItemBackground"
-                android:text="限速管理" />
+                <Button
+                    android:id="@+id/menuBtn_IP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="?android:selectableItemBackground"
+                    android:text="IP管理" />
 
-            <Button
-                android:id="@+id/menuBtn_device"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lb_action_2_lines_height"
-                android:background="?android:selectableItemBackground"
-                android:text="设备管理" />
+                <Button
+                    android:id="@+id/menuBtn_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="?android:selectableItemBackground"
+                    android:text="限速管理" />
+
+                <Button
+                    android:id="@+id/menuBtn_device"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:selectableItemBackground"
+                    android:text="设备管理" />
+
+            </LinearLayout>
+
+
+            <FrameLayout
+                android:id="@+id/right_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginBottom="0dp"
+                android:layout_weight="3"
+                android:paddingTop="0dp"></FrameLayout>
 
         </LinearLayout>
-
-
-        <FrameLayout
-            android:id="@+id/right_layout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_weight="3"
-            android:paddingTop="0dp"></FrameLayout>
-
     </LinearLayout>
 
 
