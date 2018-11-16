@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private WifiConnect myWifi;
     private WifiManager mWifiManager;
+
+    private long firstTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,24 +89,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnSwitch_swiFra:
                 if (btnSwitch.isChecked()) {
-                    // TODO: 打开状态下
                     if (mWifiManager.isWifiEnabled()) {
                         mWifiManager.setWifiEnabled(false);
                     }
-                    Method method = null;
                     try {
-                        method = mWifiManager.getClass().getMethod("getWifiApConfiguration");
+                        Method method = mWifiManager.getClass().getMethod("getWifiApConfiguration");
                         WifiConfiguration apConfig = (WifiConfiguration) method.invoke(mWifiManager);
-                        //apConfig.
-                        //Log.d(TAG, "onClick: "+apConfig.preSharedKey);
-//                        if(apConfig.preSharedKey.equals("")){
-//                            myWifi.stratWifiAp(apConfig.SSID, apConfig.preSharedKey, "NONE");
-//
-//                        }
-//                        else{
-                            myWifi.stratWifiAp(apConfig.SSID, "123456789", "WPA_PSK");
-//                        }
-
+                        if(apConfig.preSharedKey == null){
+                            myWifi.stratWifiAp(apConfig.SSID,"null" , "NONE");
+                        }
+                        else{
+                            myWifi.stratWifiAp(apConfig.SSID, apConfig.preSharedKey, "WPA_PSK");
+                        }
                         btnSwitch.setText(apConfig.SSID);
                         apManage.setVisibility(View.VISIBLE);
                         Toast.makeText(this, "开启热点成功", Toast.LENGTH_SHORT).show();
@@ -112,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 } else {
-                    // TODO：关闭状态下
                     myWifi.closeWifiAp();
                     btnSwitch.setText("打开/关闭热点");
                     apManage.setVisibility(View.GONE);
@@ -125,13 +121,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // 替换Fragment
-    private void replaceFragment(Fragment fragment){
+    public void replaceFragment(Fragment fragment){
         Log.i(TAG, "replaceFragment: "+fragment.getClass());
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.right_layout,fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myWifi.closeWifiAp();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            long secondTime = System.currentTimeMillis();
+            if (secondTime - firstTime > 2000) {
+                Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                firstTime = secondTime;
+                return true;
+            } else{
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

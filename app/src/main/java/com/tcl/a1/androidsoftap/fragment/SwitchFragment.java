@@ -1,13 +1,15 @@
 package com.tcl.a1.androidsoftap.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v17.leanback.animation.LogDecelerateInterpolator;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,9 +46,10 @@ public class SwitchFragment extends Fragment {
     //默认账户名密码和加密方式
     private String apName = "a1TestAp";
     private String apPassword = "12345678";
-    private String  encryptionMethod = "WPA_PSK";
+    private String encryptionMethod = "WPA_PSK";
     private String[] encryptionTypeList;
     private ArrayAdapter<String> adapter;
+    private WifiConfiguration apConfig;
 
     @Nullable
     @Override
@@ -69,14 +72,17 @@ public class SwitchFragment extends Fragment {
         encryptionType.setAdapter(adapter);
         try {
             Method method = mWifiManager.getClass().getMethod("getWifiApConfiguration");
-            WifiConfiguration apConfig = (WifiConfiguration) method.invoke(mWifiManager);
-            apName=apConfig.SSID;
-            apPassword= apConfig.preSharedKey;
+            apConfig = (WifiConfiguration) method.invoke(mWifiManager);
+            apName = apConfig.SSID;
+            apPassword = apConfig.preSharedKey;
         } catch (Exception e) {
             e.printStackTrace();
         }
         ssid_text.setText(apName);
         password_text.setText(apPassword);
+        if(apConfig.preSharedKey == null){
+            encryptionType.setSelection(1);
+        }
         return view;
     }
 
@@ -84,6 +90,32 @@ public class SwitchFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        password_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length() < 8){
+                    if(btnSure.isClickable()){
+                        btnSure.setClickable(false);
+                        btnSure.setTextColor(Color.GRAY);
+                    }
+                }else{
+                    if(!btnSure.isClickable()){
+                        btnSure.setClickable(true);
+                        btnSure.setTextColor(Color.WHITE);
+                    }
+                }
+            }
+        });
         // 确认按钮的点击事件
         btnSure.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,10 +129,13 @@ public class SwitchFragment extends Fragment {
                         mWifiManager.setWifiEnabled(false);
                     }
                     myWifi.closeWifiAp();
-                    myWifi.stratWifiAp(apName, apPassword, encryptionMethod);
+                    if (myWifi.stratWifiAp(apName, apPassword, encryptionMethod)) {
+                        Toast.makeText(getActivity(), "开启热点成功", Toast.LENGTH_SHORT).show();
+                        btnSwitch.setText(apName);
+                    } else {
+                        Toast.makeText(getActivity(), "开启热点失败", Toast.LENGTH_SHORT).show();
+                    }
                     Log.d(TAG, "onClick: " + encryptionMethod);
-                    btnSwitch.setText(apName);
-                    Toast.makeText(getActivity(), "开启热点成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), "热点名和密码不能为空", Toast.LENGTH_SHORT).show();
                 }
@@ -121,11 +156,11 @@ public class SwitchFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 encryptionMethod = encryptionType.getItemAtPosition(i).toString();
-                if(encryptionMethod.equals("NONE")){
+                if (encryptionMethod.equals("NONE")) {
                     password_text.setVisibility(View.GONE);
                     passwordLable.setVisibility(View.GONE);
-                }else {
-                    if(password_text.getVisibility() == View.GONE){
+                } else {
+                    if (password_text.getVisibility() == View.GONE) {
                         password_text.setVisibility(View.VISIBLE);
                         passwordLable.setVisibility(View.VISIBLE);
                     }

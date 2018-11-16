@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="SSID"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/ssid_swiFra"
@@ -49,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="密    码"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/password_swiFra"
@@ -72,7 +74,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="加密方式"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/encryptionType_swiFra"
@@ -80,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:entries="@array/encryptiontypeArr"
+            android:scrollbarSize="@dimen/lb_action_padding_horizontal"
             android:textAlignment="center" />
     </LinearLayout>
 
@@ -102,7 +106,8 @@
                 android:id="@+id/btnCancel_swiFra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="重设" />
+                android:text="重设"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -115,7 +120,8 @@
                 android:id="@+id/sure_swiFra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="启用" />
+                android:text="启用"
+                android:textSize="18sp" />
         </LinearLayout>
 
 

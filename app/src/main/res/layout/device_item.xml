@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/device_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="@dimen/lb_action_2_lines_height">
+
+
+    <TextView
+        android:id="@+id/ip_address"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="@dimen/lb_action_with_icon_padding_end" />
+
+    <TextView
+        android:id="@+id/mac_address"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="@dimen/lb_action_with_icon_padding_end" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="@dimen/lb_action_with_icon_padding_end"
+        tools:text="未连接" />
+
+</LinearLayout>

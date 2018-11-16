@@ -1,5 +1,6 @@
 package com.tcl.a1.androidsoftap;
 
+import android.content.Context;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -29,8 +30,9 @@ public class WifiConnect {
 	 * @param mSSID
 	 * @param mPasswd
 	 */
-	public void stratWifiAp(String mSSID, String mPasswd, String authAlogrithm) {
+	public boolean stratWifiAp(String mSSID, String mPasswd, String authAlogrithm) {
 		Method method1 = null;
+		boolean flag = false;
 		try {
 			method1 = wifiManager.getClass().getMethod("setWifiApEnabled", WifiConfiguration.class, boolean.class);
 			WifiConfiguration netConfig = new WifiConfiguration();
@@ -39,6 +41,7 @@ public class WifiConnect {
 			switch (authAlogrithm){
 				case "NONE":
 					netConfig.allowedAuthAlgorithms.set(WifiConfiguration.KeyMgmt.NONE);
+					flag = true;
 					break;
 				case "WPA_PSK":
 					netConfig.preSharedKey = mPasswd;
@@ -50,10 +53,12 @@ public class WifiConnect {
 					netConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
 					netConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
 					netConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+					flag = true;
 					break;
+				default:
+
 			}
 			method1.invoke(wifiManager, netConfig, true);
-			Log.d("ysw","热点配置成功");
 
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block  
@@ -69,6 +74,7 @@ public class WifiConnect {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
+		return flag;
 	}
 
 	/**
