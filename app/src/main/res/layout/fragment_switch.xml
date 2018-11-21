@@ -106,6 +106,7 @@
                 android:id="@+id/btnCancel_swiFra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:nextFocusUp="@id/encryptionType_swiFra"
                 android:text="重设"
                 android:textSize="18sp" />
         </LinearLayout>

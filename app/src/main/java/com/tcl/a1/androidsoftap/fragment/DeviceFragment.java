@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,6 +29,11 @@ import com.tcl.a1.androidsoftap.DeviceInfo;
 import com.tcl.a1.androidsoftap.MainActivity;
 import com.tcl.a1.androidsoftap.R;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -34,6 +41,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static com.tcl.a1.androidsoftap.MainActivity.getCoName;
 
 
 public class DeviceFragment extends Fragment {
@@ -52,32 +61,13 @@ public class DeviceFragment extends Fragment {
         deviceInfoList = getDeviceInfo();
         adapter = new DeviceAdapter(getContext(),R.layout.device_item, deviceInfoList);
         device_list.setAdapter(adapter);
-        refreshDeviceList();
+        adapter.notifyDataSetChanged();
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-    }
-
-    private void refreshDeviceList(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-        }).start();
     }
 
     private ArrayList getDeviceInfo() {
@@ -104,7 +94,8 @@ public class DeviceFragment extends Fragment {
                 if (mac.contains("00:00:00:00:00:00")) continue;
                 if(!ip.substring(8, 10).equals("43")) continue;
                 if(status.equals("0x2")){
-                    DeviceInfo info = new DeviceInfo(mac, ip, status);
+                    Log.d(TAG, "getDeviceInfo: " + mac);
+                    DeviceInfo info = new DeviceInfo(mac, ip, getCoName(mac));
                     deviceInfoList.add(info);
                 }
             }
@@ -155,11 +146,7 @@ public class DeviceFragment extends Fragment {
             }
             viewHolder.ip_text.setText(deviceInfo.getIp());
             viewHolder.mac_text.setText(deviceInfo.getMac());
-            if(deviceInfo.getStatus().equals("0x2")){
-                viewHolder.status_text.setText("已连接");
-            }else{
-                viewHolder.status_text.setText("未连接");
-            }
+            viewHolder.status_text.setText(deviceInfo.getStatus());
             return view;
         }
     }

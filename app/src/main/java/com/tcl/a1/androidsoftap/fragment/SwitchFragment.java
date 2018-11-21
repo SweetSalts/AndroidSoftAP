@@ -123,8 +123,9 @@ public class SwitchFragment extends Fragment {
                 apName = ssid_text.getText().toString();
                 apPassword = password_text.getText().toString();
 
-                if (!"".equals(apName) && (!"".equals(apPassword) ||
-                        encryptionMethod.equals("NONE"))) {
+                if (checkSSID(apName) && (checkPassword(apPassword) ||
+                        encryptionMethod.equals("NONE"))
+                        ) {
                     if (mWifiManager.isWifiEnabled()) {
                         mWifiManager.setWifiEnabled(false);
                     }
@@ -137,7 +138,7 @@ public class SwitchFragment extends Fragment {
                     }
                     Log.d(TAG, "onClick: " + encryptionMethod);
                 } else {
-                    Toast.makeText(getActivity(), "热点名和密码不能为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "热点名和密码格式不正确", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -180,5 +181,12 @@ public class SwitchFragment extends Fragment {
         super.onDestroy();
         myWifi.closeWifiAp();
     }
-
+    public boolean checkPassword(String s){
+        String reg = "^([A-Z]|[a-z]|[0-9]|[`~!@#$%^&*()+=|{}':;',\\\\\\\\[\\\\\\\\].<>/?~！@#￥%……&*（）――+|{}【】‘；：”“'。，、？]){8,63}$";
+        return s.matches(reg);
+    }
+    public boolean checkSSID(String s){
+        String reg = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\\u4e00-\\u9fa5]+$";
+        return s.matches(reg);
+    }
 }
